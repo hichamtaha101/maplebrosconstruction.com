@@ -1,0 +1,31 @@
+:root {
+	--primary-color: #003e6b;
+	--primary-color-2: #0a558c;
+	--primary-color-3: #0f609b;
+	--primary-color-4: #186faf;
+	--primary-color-5: #2680c2;
+	--primary-color-6: #4098d7;
+	--primary-color-7: #62b0e8;
+	--primary-color-8: #84c5f4;
+	--primary-color-9: #b6e0fe;
+	--primary-color-10: #dceefb;
+	--secondary-color: #102a43;
+	--secondary-color-2: #243b53;
+	--secondary-color-3: #334e68;
+	--secondary-color-4: #486581;
+	--secondary-color-5: #627d98;
+	--secondary-color-6: #829ab1;
+	--secondary-color-7: #9fb3c8;
+	--secondary-color-8: #bcccdc;
+	--secondary-color-9: #d9e2ec;
+	--secondary-color-10: #f0f4f8;
+	--font-header: "Freight Sans";
+	--font-text: "Proxima Nova";
+	--font-1: "sans-serif";
+	--font-2: Verdana;
+	--font-3: Tahoma;
+	--font-4: FontAwesome;
+	--header-height: 80px;
+	--footer-height: 419px;
+	--site-max-width: 1600px;
+}

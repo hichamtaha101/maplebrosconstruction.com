@@ -1,0 +1,62 @@
+@import "./fonts.css";
+@import "./variables.css";
+
+* {
+	scroll-behavior: smooth;
+}
+
+html {
+	overflow-x: hidden;
+}
+
+body {
+	font-family: var(--font-text), var(--font-1), var(--font-2), var(--font-3),
+		var(--font-4);
+	padding: 0 !important;
+	overflow: hidden;
+
+	/* &::-webkit-scrollbar {
+		display: none;
+	}
+	-ms-overflow-style: none;
+	scrollbar-width: none; */
+}
+
+a {
+	text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	font-family: var(--font-header), var(--font-text), var(--font-1),
+		var(--font-2), var(--font-3), var(--font-4);
+	font-size: revert;
+}
+
+p {
+	line-height: 21px;
+}
+
+.mbc {
+	&-wrapper {
+		max-width: var(--site-max-width);
+		width: 100%;
+		padding-left: 32px;
+		padding-right: 32px;
+		margin: auto;
+	}
+	&-page {
+		min-height: calc(100vh - var(--header-height) - var(--footer-height));
+		background-color: var(--secondary-color-10);
+	}
+}

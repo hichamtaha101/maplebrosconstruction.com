@@ -1,0 +1,17 @@
+.mbc-button {
+	@add-mixin mbc-button-styles;
+	color: var(--secondary-color-10);
+	background-color: var(--secondary-color);
+	&:hover {
+		background-color: var(--secondary-color-2);
+	}
+	&--inverse {
+		@add-mixin mbc-button-styles;
+		color: var(--secondary-color);
+		background-color: var(--secondary-color-10);
+		&:hover {
+			color: var(--secondary-color-10);
+			background-color: var(--secondary-color);
+		}
+	}
+}

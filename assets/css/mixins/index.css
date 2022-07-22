@@ -1,0 +1,26 @@
+@define-mixin mbc-button-styles {
+	box-shadow: 0px 4px 7px #00000026;
+	padding: 12px 15px;
+	width: 100%;
+	max-width: 255px;
+	&--full-w {
+		max-width: 100%;
+	}
+	max-height: 47px;
+	border-radius: 3px;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+}
+
+@define-mixin dotted-line-styles $bc: #2f69bb, $color: #777777 {
+	background-color: $bc;
+	background-image: linear-gradient(
+		to right,
+		$color 33%,
+		rgba(255, 255, 255, 0) 0%
+	);
+	background-position: top;
+	background-size: 8px 3px;
+	background-repeat: repeat-x;
+	height: 3px;
+}

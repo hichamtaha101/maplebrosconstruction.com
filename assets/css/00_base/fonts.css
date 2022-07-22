@@ -1,0 +1,31 @@
+@font-face {
+	font-family: "Freight Sans";
+	font-weight: 300;
+	src: url("~assets/fonts/Freight Sans Light.otf") format("opentype");
+}
+@font-face {
+	font-family: "Freight Sans";
+	font-weight: 500;
+	src: url("~assets/fonts/Freight Sans Medium.otf") format("opentype");
+}
+@font-face {
+	font-family: "Freight Sans";
+	font-weight: 700;
+	src: url("~assets/fonts/Freight Sans Bold.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "Proxima Nova";
+	font-weight: 300;
+	src: url("~assets/fonts/Proxima Nova Light.ttf") format("truetype");
+}
+@font-face {
+	font-family: "Proxima Nova";
+	font-weight: 500;
+	src: url("~assets/fonts/Proxima Nova Regular.ttf") format("truetype");
+}
+@font-face {
+	font-family: "Proxima Nova";
+	font-weight: 700;
+	src: url("~assets/fonts/Proxima Nova SemiBold.ttf") format("truetype");
+}
