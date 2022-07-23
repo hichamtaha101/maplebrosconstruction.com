@@ -5,9 +5,9 @@
 			<div class="mbc-section mbc-section--projects">
 				<div class="mbc-project" v-for="(p, i) in projects" :key="i">
 					<div class="mbc-project__thumbnail cursor-pointer">
-						<button @click="$router.push('/projects/' + p._id)">View More</button>
+						<button>View More</button>
 						<div class="mbc-project__thumbnail__overlay" @click="$router.push('/projects/' + p._id)" />
-						<img src="~assets/images/blank-project.jpg" alt="blank-placeholder-image">
+						<img :src="require(`~/assets/images/${p.thumbnail}`)" :alt="p.thumbnailAlt">
 					</div>
 					<div class="mbc-project__content">
 						<div class="mbc-project__content__title mb-2">{{ p.title }}</div>
@@ -43,17 +43,19 @@ export default {
 		&__thumbnail {
 			@apply relative overflow-hidden;
 			button {
-				@apply opacity-0 absolute left-0 right-0 text-lg z-20;
+				@apply opacity-0 absolute left-0 right-0 z-20 m-auto p-2 text-sm;
 				top: 50%;
 				transform: translateY(-50%);
 				transition: all 0.3s ease-in-out;
-				color: var(--secondary-color);
+				color: white;
+				background-color: var(--secondary-color);
+				z-index: 1;
+				max-width: 180px;
+				width: 100%;
+				border-radius: 3px;
 			}
 			&:hover {
 				button { opacity: 1; }
-				.mbc-project__thumbnail__overlay {
-					opacity: 0.1;
-				}
 				img { transform: scale(1.05); }
 			}
 			img { 
@@ -61,8 +63,7 @@ export default {
 				width: 100%;
 			}
 			&__overlay {
-				@apply opacity-0 bottom-0 left-0 h-full w-full bg-black z-10 absolute;
-				transition: all 0.3s ease-in-out;
+				@add-mixin dark-overlay;
 			}
 		}
 		&__content {

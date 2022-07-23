@@ -11,7 +11,7 @@
 						<div class="mbc-service__title text-xl mt-auto">{{ service.title }}</div>
 						<div class="mbc-service__description">{{ service.description }}</div>
 						<div class="mbc-service__button pt-5 mt-auto">
-							<div class="mbc-button text-center" @click="$router.push(`/quote?service=${service.title}`)">Get A Quote</div>
+							<button class="mbc-button text-center" @click="$router.push(`/quote?service=${service.title}`)">Get A Quote</button>
 						</div>
 					</div>
 				</div>

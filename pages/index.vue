@@ -6,12 +6,12 @@
 					<h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
 					<p class="mt-4 leading-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 					<div class="flex flex-wrap sm:flex-nowrap gap-8 mt-8">
-						<div class="mbc-button text-center" @click="$router.push('/about')">
+						<button class="mbc-button text-center" @click="$router.push('/about')">
 							About Us
-						</div>
-						<div class="mbc-button text-center" @click="$router.push('/quote')">
+						</button>
+						<button class="mbc-button text-center" @click="$router.push('/quote')">
 							Request A Quote
-						</div>
+						</button>
 					</div>
 				</div>
 				<div class="w-full"></div>
@@ -26,7 +26,7 @@
 						<div class="mbc-service-card__title text-xl">{{service.title }}</div>
 						<div class="mbc-service-card__icon"><i :class="`${service.icon} text-6xl`"></i></div>
 						<div class="mbc-service-card__description">{{ service.description }}</div>
-						<div class="mbc-button mbc-button--full-w" @click="$router.push(`${service.link}#${service.hash}`)">Learn More</div>
+						<button class="mbc-button mbc-button--full-w" @click="$router.push(`${service.link}#${service.hash}`)">Learn More</button>
 					</div>
 				</div>
 			</div>
@@ -36,14 +36,25 @@
 				<h1 class="text-center">Our Latest Work</h1>
 				<p class="text-center mbc-section__sub-title">Check out our latest exterior and interior renovations.</p>
 				<div class="mbc-our-work flex-col sm:flex-row flex gap-6 mt-16">
-					<div class="mbc-featured-work flex-grow"></div>
+					<div class="mbc-work--featured" @click="$router.push('/projects/' + featuredProject._id)">
+						<button @click="$router.push('/projects/' + featuredProject._id)">{{ featuredProject.title }}</button>
+						<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + featuredProject._id)" />
+						<div class="mbc-work__image">
+							<img class="w-full" :src="require(`~/assets/images/${featuredProject.thumbnail}`)" :alt="featuredProject.thumbnailAlt">
+						</div>
+					</div>
 					<div class="mbc-work-wrap grid gird-cols-1 xs:grid-cols-2 gap-6 flex-grow">
-						<div class="mbc-work" v-for="(w, i ) in work" :key="i">
+						<div class="mbc-work" v-for="(project, i ) in projects.filter( p => !p.featured ).slice(0,4)" :key="i" @click="$router.push('/projects/' + project._id)">
+							<button @click="$router.push('/projects/' + project._id)">{{ project.title }}</button>
+							<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + project._id)" />
+							<div class="mbc-work__image">
+								<img class="w-full" :src="require(`~/assets/images/${project.thumbnail}`)" :alt="project.thumbnailAlt">
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="flex justify-center mt-16">
-					<div class="mbc-button text-center" @click="$router.push('/projects')">View All Projects</div>
+					<button class="mbc-button text-center" @click="$router.push('/projects')">View All Projects</button>
 				</div>
 			</div>
 		</div>
@@ -73,7 +84,7 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
   // optional style for arrows & dots
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-import { services } from '~/assets/js/data';
+import { services, projects, testimonials } from '~/assets/js/data';
 
 export default {
 	components: {
@@ -110,64 +121,9 @@ export default {
 					],
 				},
 				services,
-				testimonials: [
-					{
-						author: 'John Smith',
-						comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-						imageUrl: '',
-						stars: 5,
-					},
-					{
-						author: 'Larry Lobster',
-						comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-						imageUrl: '',
-						stars: 5,
-					},
-					{
-						author: 'Bat Mane',
-						comment: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-						imageUrl: '',
-						stars: 5,
-					},
-					{
-						author: 'Scooter Mans',
-						comment: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-						imageUrl: '',
-						stars: 5,
-					}
-				],
-				featuredWork: {
-					title: '',
-					category: '',
-					date: '',
-					imageUrl: ''
-				},
-				work: [
-					{
-						title: '',
-						category: '',
-						date: '',
-						imageUrl: ''
-					},
-					{
-						title: '',
-						category: '',
-						date: '',
-						imageUrl: ''
-					},
-					{
-						title: '',
-						category: '',
-						date: '',
-						imageUrl: ''
-					},
-					{
-						title: '',
-						category: '',
-						date: '',
-						imageUrl: ''
-					}
-				]
+				testimonials,
+				projects,
+				featuredProject: projects.find( p => p.featured ),
 			});
 		})
 	},
@@ -268,20 +224,43 @@ export default {
 	}
 }
 
-.mbc-featured-work, .mbc-work {
+.mbc-work--featured {
+	width: 100%;
+	@media(--min-sm) {
+		max-width: 50%;
+	}
+	.mbc-work__image {
+		background-color: var(--primary-color);
+	}
+}
+.mbc-work--featured, .mbc-work {
+	@apply relative overflow-hidden;
 	background-color: var(--secondary-color-10);
 	border-radius: 4px;
 	transition: all 0.2s;
-	min-height: 265px;
 	box-shadow: 0px 4px 7px #00000026;
 	&:hover {
 		box-shadow: 0px 8px 14px #00000026;
 		cursor: pointer;
+		button { opacity: 1; }
 	}
-}
-.mbc-work {
-	min-height: 265px;
-	&-wrap {
+	button {
+		@apply opacity-0 absolute left-0 right-0 z-20 m-auto p-2 text-sm;
+		top: 50%;
+		transform: translateY(-50%);
+		transition: all 0.3s ease-in-out;
+		color: white;
+		background-color: var(--secondary-color);
+		z-index: 1;
+		max-width: 180px;
+		width: 100%;
+		border-radius: 3px;
+	}
+	&__image {
+		@apply h-full flex items-center justify-center;
+	}
+	&__overlay {
+		@add-mixin dark-overlay;
 	}
 }
 </style>

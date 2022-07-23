@@ -16,7 +16,7 @@
 							<textarea placeholder="How can we help you?" class="w-full"></textarea>
 						</div>
 						<div>
-							<div class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center">Submit</div>
+							<button class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center">Submit</button>
 						</div>
 					</div>
 				</div>
