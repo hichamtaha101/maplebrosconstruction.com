@@ -37,7 +37,7 @@
 				<p class="text-center mbc-section__sub-title">Check out our latest exterior and interior renovations.</p>
 				<div class="mbc-our-work flex-col sm:flex-row flex gap-6 mt-16">
 					<div class="mbc-work--featured" @click="$router.push('/projects/' + featuredProject._id)">
-						<button @click="$router.push('/projects/' + featuredProject._id)">{{ featuredProject.title }}</button>
+						<button class="mbc-work-button" @click="$router.push('/projects/' + featuredProject._id)">{{ featuredProject.title }}</button>
 						<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + featuredProject._id)" />
 						<div class="mbc-work__image">
 							<img class="w-full" :src="require(`~/assets/images/${featuredProject.thumbnail}`)" :alt="featuredProject.thumbnailAlt">
@@ -45,7 +45,7 @@
 					</div>
 					<div class="mbc-work-wrap grid gird-cols-1 xs:grid-cols-2 gap-6 flex-grow">
 						<div class="mbc-work" v-for="(project, i ) in projects.filter( p => !p.featured ).slice(0,4)" :key="i" @click="$router.push('/projects/' + project._id)">
-							<button @click="$router.push('/projects/' + project._id)">{{ project.title }}</button>
+							<button class="mbc-work-button" @click="$router.push('/projects/' + project._id)">{{ project.title }}</button>
 							<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + project._id)" />
 							<div class="mbc-work__image">
 								<img class="w-full" :src="require(`~/assets/images/${project.thumbnail}`)" :alt="project.thumbnailAlt">
@@ -240,24 +240,27 @@ export default {
 	transition: all 0.2s;
 	box-shadow: 0px 4px 7px #00000026;
 	&:hover {
+		@apply cursor-pointer;
 		box-shadow: 0px 8px 14px #00000026;
-		cursor: pointer;
-		button { opacity: 1; }
+		.mbc-work-button {
+			@apply opacity-100;
+		}
+		img { transform: scale(1.05); }
 	}
-	button {
-		@apply opacity-0 absolute left-0 right-0 z-20 m-auto p-2 text-sm;
+	.mbc-work-button {
+		@apply opacity-0 absolute left-0 right-0 m-auto p-2 text-sm w-full text-white z-10;
 		top: 50%;
 		transform: translateY(-50%);
 		transition: all 0.3s ease-in-out;
-		color: white;
 		background-color: var(--secondary-color);
-		z-index: 1;
 		max-width: 180px;
-		width: 100%;
 		border-radius: 3px;
 	}
 	&__image {
 		@apply h-full flex items-center justify-center;
+		img {
+			transition: all 0.3s ease-in-out;
+		}
 	}
 	&__overlay {
 		@add-mixin dark-overlay;
