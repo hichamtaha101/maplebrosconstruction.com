@@ -9,14 +9,19 @@
 					<p class="pt-2 pb-4">Let us know about any questions or comments regarding our services, and we'll reach out as soon as possible!</p>
 					<div class="mbc-footer-contact__form">
 						<div class="flex gap-4 pb-4">
-							<input placeholder="Full Name" type="text" class="w-full">
-							<input placeholder="Email" type="text" class="w-full">
+							<input v-model="formData.fullName" placeholder="Full Name" type="text" class="w-full">
+							<input v-model="formData.emailAddress" placeholder="Email" type="text" class="w-full">
 						</div>
 						<div class="pb-4">
-							<textarea placeholder="How can we help you?" class="w-full"></textarea>
+							<textarea v-model="formData.message" placeholder="How can we help you?" class="w-full"></textarea>
 						</div>
 						<div>
-							<button class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center">Submit</button>
+							<button @click="email" class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center">Submit</button>
+						</div>
+						<div :class="`mbc-footer-contact__form__notifications ${!nPass ? 'text-red-600' : 'text-green-600'}`" v-if="notifications.length">
+							<ul>
+								<li v-for="(n, ni) in notifications" :key="ni">*{{ n }}</li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -51,7 +56,73 @@
 		</div>
 	</div>
 </template>
+<script>
+import { testEmail } from '~/assets/js/util';
 
+const formDataFieldsMapped = {
+	fullName: 'Full name',
+	emailAddress: 'Email address',
+	message: 'Message',
+}
+
+const defaultFormData = {
+	fullName: '',
+	emailAddress: '',
+	message: '',
+};
+
+export default {
+	data() {
+		return {
+			formData: JSON.parse(JSON.stringify(defaultFormData)),
+			notifications: [],
+			nPass: true,
+		}
+	},
+	methods: {
+		email() {
+
+			// Basic field validations.
+			const errors = Object.keys(this.formData)
+			.filter( k => this.formData[k].trim() === '' )
+			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
+
+			const fullName = this.formData.fullName.trim();
+			const emailAddress = this.formData.emailAddress.trim();
+			const message = this.formData.message.trim();
+
+			// Email validation.
+			if ( emailAddress !== '' && !testEmail(emailAddress) ) {
+				errors.push('Please enter a valid email address.');
+			}
+			if ( fullName !== '' && fullName.length < 3 ) {
+				errors.push('Full name must be more than 2 characters.');
+			}
+			if ( message !== '' && message.length < 11 ) {
+				errors.push('Your message must be greater than 10 characters in length.');
+			}
+
+			if ( errors.length ) {
+				this.notifications = errors;
+				this.nPass = false;
+				return;
+			}
+
+			// Communicate with lambda server.
+			try {
+				const response = { pass: true, data: 'test' };
+				this.notifications = [response.data];
+				this.nPass = response.pass;
+				if ( this.nPass ) { this.formData = JSON.parse( JSON.stringify( defaultFormData ) ); }
+			} catch (e) {
+				this.nPass = false;
+				this.notifications = ['Unable to communicate with servers, please try again later.'];
+			}
+
+		}
+	}
+}
+</script>
 <style lang="postcss">
 .mbc-footer {
 	color: var(--secondary-color-10);
@@ -66,6 +137,10 @@
 					color: var(--secondary-color);
 					opacity: 0.75;
 				}
+			}
+			&__notifications {
+				@apply mt-3 py-1 px-2 rounded-sm text-sm;
+				background-color: var(--secondary-color-9);
 			}
 		}
 		&__icons {

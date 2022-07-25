@@ -43,6 +43,11 @@
 						<div class="mbc-quote-form__input mbc-quote-form__input--button">
 							<button @click="email" class="mbc-button mbc-button--full-w text-center uppercase">Submit</button>
 						</div>
+						<div class="mbc-quote-form__errors text-red-600" v-if="errors.length">
+							<ul>
+								<li v-for="(e, ei) in errors" :key="ei">*{{ e }}</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -51,6 +56,14 @@
 </template>
 <script>
 import { services } from '~/assets/js/data';
+import { testEmail } from '~/assets/js/util';
+
+const formDataFieldsMapped = {
+	service: 'Service',
+	fullName: 'Full name',
+	emailAddress: 'Email address',
+	message: 'Message',
+}
 
 const defaultFormData = {
 	service: '',
@@ -84,9 +97,45 @@ export default {
 	},
 	methods: {
 		email() {
-			const errors = [];
-			this.formData = JSON.parse(JSON.stringify(defaultFormData))
-			this.errors = errors;
+
+			// Basic field validations.
+			const errors = ['service', 'fullName', 'emailAddress']
+			.filter( k => this.formData[k].trim() === '' )
+			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
+
+			// Service equals Other and phone number validations.
+			if ( this.formData.service === 'Other' && this.formData.serviceOther.trim().length < 3 ) {
+				errors.push('Please enter a valid value for "Other Service". Must exceed 3 characters in length.');
+			}
+			if ( this.formData.phoneNumber.trim() !== '' && this.formData.phoneNumber.length < 14 ) {
+				errors.push('Please enter a valid phone number in the format (###)-###-####.');
+			}
+
+			// Email validation.
+			if ( this.formData.emailAddress.trim() !== '' && !testEmail(this.formData.emailAddress) ) {
+				errors.push('Please enter a valid email address.');
+			}
+
+			if ( errors.length ) { 
+				this.errors = errors;
+				return; 
+			} // Don't continue.
+
+			try {
+				const response = { pass: true, data: 'test' }
+
+				// Reset form upon success and redirect.
+				if ( response.pass ) {
+					this.formData = JSON.parse(JSON.stringify(defaultFormData))
+					this.$router.push('/thank-you');
+				} else {
+					this.errors = [response.data];
+				}
+
+			} catch (e) {
+				this.errors = ['Unable to communicate with servers, please try again later.'];
+			}
+
 		}
 	}
 }
