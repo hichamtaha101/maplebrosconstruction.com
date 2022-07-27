@@ -1,4 +1,5 @@
 const postcss = require("./postcss.webpack.config");
+const { projects } = require('./assets/js/data');
 
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
@@ -69,4 +70,7 @@ export default {
 	build: {
 		postcss,
 	},
+	generate: {
+		routes: () => projects.map( p => `/projects/${p._id}`)
+	}
 };

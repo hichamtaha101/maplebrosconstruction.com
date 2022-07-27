@@ -1,7 +1,7 @@
 const dd = 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.';
 
 export const projects = [1,2,3,4,5,6,7].map( (v, i) => ({
-	_id: 'sed-ut-perspiciatis-unde',
+	_id: `sed-ut-perspiciatis-unde-${i}`,
 	thumbnail: 'blank-project.jpg',
 	thumbnailAlt: 'blank-placeholder-image',
 	featured: i === 0,
