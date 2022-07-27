@@ -6,12 +6,12 @@
 				<h1 class="text-center">One Email Away</h1>
 				<p class="mbc-section__sub-title text-center">Duis aute irure dolor in reprehenderit in voluptate velit irure dolor.</p>
 			</div>
-			<div class="mbc-quote flex-col sm:flex-row flex pb-12">
-				<div class="flex-grow flex justify-center">
-					Left Graphic Image
+			<div class="mbc-quote flex-col sm:flex-row flex pb-12 gap-4 sm:gap-6">
+				<div class="mbc-quote--left-graphic flex-grow flex justify-center">
 				</div>
-				<div class="flex-grow">
-					<div class="mbc-quote-form p-8 bg-white flex flex-col gap-6">
+				<div class="mbc-quote--right-content">
+					<div class="mbc-quote-form p-8 bg-white flex flex-col gap-6 relative">
+						<loader v-if="isLoading"/>
 						<div class="mbc-quote-form__input mbc-quote-form__input--select">
 							<label for="service-select">Service</label>
 							<select name="service-select" v-model="formData.service">
@@ -30,7 +30,7 @@
 						</div>
 						<div class="mbc-quote-form__input mbc-quote-form__input--text">
 							<label for="email-input">Email Address <span class="text-red-500">*</span></label>
-							<input v-model="formData.emailAddress" type="text" name="email-input">
+							<input v-model="formData.email" type="text" name="email-input">
 						</div>
 						<div class="mbc-quote-form__input mbc-quote-form__input--text">
 							<label for="phone-number-input">Phone Number</label>
@@ -41,7 +41,7 @@
 							<textarea v-model="formData.message" name="message-textarea"></textarea>
 						</div>
 						<div class="mbc-quote-form__input mbc-quote-form__input--button">
-							<button @click="email" class="mbc-button mbc-button--full-w text-center uppercase">Submit</button>
+							<button @click="submitEmail" class="mbc-button mbc-button--full-w text-center uppercase"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
 						</div>
 						<div class="mbc-quote-form__errors text-red-600" v-if="errors.length">
 							<ul>
@@ -57,11 +57,12 @@
 <script>
 import { services } from '~/assets/js/data';
 import { testEmail } from '~/assets/js/util';
+import axios from 'axios';
 
 const formDataFieldsMapped = {
 	service: 'Service',
 	fullName: 'Full name',
-	emailAddress: 'Email address',
+	email: 'Email address',
 	message: 'Message',
 }
 
@@ -69,7 +70,7 @@ const defaultFormData = {
 	service: '',
 	serviceOther: '',
 	fullName: '',
-	emailAddress: '',
+	email: '',
 	phoneNumber: '',
 	message: '',
 };
@@ -86,6 +87,7 @@ export default {
 		return {
 			formData: JSON.parse(JSON.stringify(defaultFormData)),
 			errors: [],
+			isLoading: false,
 		};
 	},
 	mounted() {
@@ -96,10 +98,10 @@ export default {
 		}
 	},
 	methods: {
-		email() {
+		async submitEmail() {
 
 			// Basic field validations.
-			const errors = ['service', 'fullName', 'emailAddress']
+			const errors = ['service', 'fullName', 'email']
 			.filter( k => this.formData[k].trim() === '' )
 			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
 
@@ -112,7 +114,7 @@ export default {
 			}
 
 			// Email validation.
-			if ( this.formData.emailAddress.trim() !== '' && !testEmail(this.formData.emailAddress) ) {
+			if ( this.formData.email.trim() !== '' && !testEmail(this.formData.email) ) {
 				errors.push('Please enter a valid email address.');
 			}
 
@@ -121,8 +123,25 @@ export default {
 				return; 
 			} // Don't continue.
 
+			this.isLoading = true;
 			try {
-				const response = { pass: true, data: 'test' }
+				const response = await axios.post( `https://dxnmuircbi.execute-api.us-west-2.amazonaws.com${window.location.hostname === 'localhost' ? '/dev' : ''}/email`, {
+					template: 'quote',
+					subject: 'Maple Bros Construction - Customer Quote.',
+					toAddress: 'hichamtaha101@gmail.com',
+					content: {
+						title: 'A customer has made the following inquiry.',
+						data: {
+							email: this.formData.email,
+							service: this.formData.service !== 'Other' ? this.formData.service : `${this.formData.serviceOther} (Others)`,
+							message: this.formData.message || 'N/A',
+							phoneNumber: this.formData.phoneNumber || 'N/A',
+							fullName: this.formData.fullName,
+						},
+					},
+					from: 'hicham.taha@henesysgroup.com',
+					layout: 'maplebrosconstruction',
+				} );
 
 				// Reset form upon success and redirect.
 				if ( response.pass ) {
@@ -135,7 +154,7 @@ export default {
 			} catch (e) {
 				this.errors = ['Unable to communicate with servers, please try again later.'];
 			}
-
+			this.isLoading = false;
 		}
 	}
 }
@@ -147,9 +166,20 @@ export default {
 	}
 	&-quote {
 		padding-bottom: 140px;
+		> div {
+			@apply w-full;
+			box-shadow: 2px 2px 2px rgb(0 0 0 / 4%);
+			min-height: 420px;
+			@media(--min-sm) {
+				min-height: 500px;
+			}
+		}
+		&--left-graphic {
+			@apply bg-center bg-cover;
+			background-image: url('~assets/images/quote-left-graphic.png');
+		}
 		&-form {
 			border-radius: 4px;
-			box-shadow: 2px 2px 2px rgb(0 0 0 / 4%);
 			&__input {
 				display: flex;
 				flex-direction: column;

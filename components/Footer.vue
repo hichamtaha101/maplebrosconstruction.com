@@ -7,16 +7,17 @@
 				<div>
 					<h2>Have a general inquiry?</h2>
 					<p class="pt-2 pb-4">Let us know about any questions or comments regarding our services, and we'll reach out as soon as possible!</p>
-					<div class="mbc-footer-contact__form">
+					<div class="mbc-footer-contact__form relative">
+						<loader v-if="isLoading"/>
 						<div class="flex gap-4 pb-4">
 							<input v-model="formData.fullName" placeholder="Full Name" type="text" class="w-full">
-							<input v-model="formData.emailAddress" placeholder="Email" type="text" class="w-full">
+							<input v-model="formData.email" placeholder="Email" type="text" class="w-full">
 						</div>
 						<div class="pb-4">
 							<textarea v-model="formData.message" placeholder="How can we help you?" class="w-full"></textarea>
 						</div>
 						<div>
-							<button @click="email" class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center">Submit</button>
+							<button @click="submitEmail" class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
 						</div>
 						<div :class="`mbc-footer-contact__form__notifications ${!nPass ? 'text-red-600' : 'text-green-600'}`" v-if="notifications.length">
 							<ul>
@@ -40,8 +41,8 @@
 					</div>
 					<div class="mbc-footer-contact__location pt-8">
 						<h2>Visit our office</h2>
-						<p class="pt-2"><i class="fa-solid fa-location-pin mr-2"></i>1208-6888 Cooney Rd, Richmond BC, V6YE01</p>
-						<p class="pt-2"><i class="fa-solid fa-phone mr-2"></i>+1 (778)-789-1002</p>
+						<p class="pt-2"><i class="fa-solid fa-location-pin mr-2"></i>1269-6969 Cooney Rd, Richmond BC, V6YE09</p>
+						<p class="pt-2"><i class="fa-solid fa-phone mr-2"></i>+1 (778)-789-6969</p>
 					</div>
 				</div>
 			</div>
@@ -58,16 +59,17 @@
 </template>
 <script>
 import { testEmail } from '~/assets/js/util';
+import axios from 'axios';
 
 const formDataFieldsMapped = {
 	fullName: 'Full name',
-	emailAddress: 'Email address',
+	email: 'Email address',
 	message: 'Message',
 }
 
 const defaultFormData = {
 	fullName: '',
-	emailAddress: '',
+	email: '',
 	message: '',
 };
 
@@ -77,10 +79,11 @@ export default {
 			formData: JSON.parse(JSON.stringify(defaultFormData)),
 			notifications: [],
 			nPass: true,
+			isLoading: false,
 		}
 	},
 	methods: {
-		email() {
+		async submitEmail() {
 
 			// Basic field validations.
 			const errors = Object.keys(this.formData)
@@ -88,11 +91,11 @@ export default {
 			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
 
 			const fullName = this.formData.fullName.trim();
-			const emailAddress = this.formData.emailAddress.trim();
+			const email = this.formData.email.trim();
 			const message = this.formData.message.trim();
 
 			// Email validation.
-			if ( emailAddress !== '' && !testEmail(emailAddress) ) {
+			if ( email !== '' && !testEmail(email) ) {
 				errors.push('Please enter a valid email address.');
 			}
 			if ( fullName !== '' && fullName.length < 3 ) {
@@ -109,8 +112,19 @@ export default {
 			}
 
 			// Communicate with lambda server.
+			this.isLoading = true;
 			try {
-				const response = { pass: true, data: 'test' };
+				const response = await axios.post( `https://dxnmuircbi.execute-api.us-west-2.amazonaws.com${window.location.hostname === 'localhost' ? '/dev' : ''}/email`, {
+					template: 'inquiry',
+					subject: 'Maple Bros Construction - Customer Inquiry.',
+					toAddress: 'hichamtaha101@gmail.com',
+					content: {
+						title: 'A customer has made the following inquiry.',
+						data: { email, message, fullName },
+					},
+					from: 'hicham.taha@henesysgroup.com',
+					layout: 'maplebrosconstruction',
+				} );
 				this.notifications = [response.data];
 				this.nPass = response.pass;
 				if ( this.nPass ) { this.formData = JSON.parse( JSON.stringify( defaultFormData ) ); }
@@ -118,7 +132,7 @@ export default {
 				this.nPass = false;
 				this.notifications = ['Unable to communicate with servers, please try again later.'];
 			}
-
+			this.isLoading = false;
 		}
 	}
 }
@@ -139,8 +153,8 @@ export default {
 				}
 			}
 			&__notifications {
-				@apply mt-3 py-1 px-2 rounded-sm text-sm;
-				background-color: var(--secondary-color-9);
+				@apply mt-4 py-1 px-2 rounded-sm text-sm;
+				background-color: var(--secondary-color-10);
 			}
 		}
 		&__icons {

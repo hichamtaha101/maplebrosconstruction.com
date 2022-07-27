@@ -2,7 +2,7 @@
   <div class="mbc-page page--home">
 		<div class="mbc-section--hero">
 			<div class="mbc-wrapper flex-col sm:flex-row flex gap-8">
-				<div class="w-full">
+				<div class="w-full p-8 mbc-section--hero__content">
 					<h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
 					<p class="mt-4 leading-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 					<div class="flex flex-wrap sm:flex-nowrap gap-8 mt-8">
@@ -141,9 +141,20 @@ export default {
 		background-color: var(--secondary-color-9);
 	}
 	&--hero {
-		@apply py-8 flex flex-row justify-center;
-		min-height: 992px;
+		@apply py-8 flex flex-row justify-center bg-center sm:bg-right bg-cover;
 		background-color: var(--secondary-color-9);
+		background-image: url('~assets/images/home-page-bg.jpg');
+
+		&__content {
+			background: #f0f4f899;
+			border-radius: 2px;
+			border: 1px solid #013e6b33;
+		}
+
+		min-height: 720px;
+		@media(--min-sm) {
+			min-height: 992px;
+		}
 	}
 	h1 {
 		@apply relative mb-8 pb-4 text-4xl;
@@ -184,9 +195,8 @@ export default {
 		@apply relative mb-4;
 
 		&--no-image {
+			@apply bg-center bg-cover;
 			background-image: url(~assets/images/blank-profile-pic.png);
-			background-size: cover;
-			background-position: center center;
 		}
 
 		i {
