@@ -8,6 +8,7 @@
 		</div>
   	</div>
 </template>
+
 <style lang="postcss" scoped>
 .page--thank-you .mbc-wrapper {
 	min-height: 480px;

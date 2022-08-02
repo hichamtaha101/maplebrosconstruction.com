@@ -126,9 +126,6 @@ export default {
 				featuredProject: projects.find( p => p.featured ),
 			});
 		})
-	},
-	data() {
-		return {}
 	}
 }
 </script>

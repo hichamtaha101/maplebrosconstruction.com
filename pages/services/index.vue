@@ -22,11 +22,12 @@
 <script>
 import { services } from '~/assets/js/data';
 export default {
-	asyncData({ req, params, redirect }) {
-		return new Promise( async( resolve ) => {
-			resolve({ services });
-		})
-	}
+	setup() {
+		// will have to use ussAsync if data pulled remotely.
+		return {
+			services,
+		}
+	},
 }
 </script>
 <style lang="postcss">

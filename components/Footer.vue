@@ -60,6 +60,7 @@
 <script>
 import { testEmail } from '~/assets/js/util';
 import axios from 'axios';
+import { reactive, ref } from 'vue';
 
 const formDataFieldsMapped = {
 	fullName: 'Full name',
@@ -74,25 +75,21 @@ const defaultFormData = {
 };
 
 export default {
-	data() {
-		return {
-			formData: JSON.parse(JSON.stringify(defaultFormData)),
-			notifications: [],
-			nPass: true,
-			isLoading: false,
-		}
-	},
-	methods: {
-		async submitEmail() {
+	setup() {
+		const formData = reactive(JSON.parse(JSON.stringify(defaultFormData)));
+		const notifications = ref([]);
+		const nPass = ref(true);
+		const isLoading = ref(false);
 
+		async function submitEmail() {
 			// Basic field validations.
-			const errors = Object.keys(this.formData)
-			.filter( k => this.formData[k].trim() === '' )
+			const errors = Object.keys(formData)
+			.filter( k => formData[k].trim() === '' )
 			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
 
-			const fullName = this.formData.fullName.trim();
-			const email = this.formData.email.trim();
-			const message = this.formData.message.trim();
+			const fullName = formData.fullName.trim();
+			const email = formData.email.trim();
+			const message = formData.message.trim();
 
 			// Email validation.
 			if ( email !== '' && !testEmail(email) ) {
@@ -106,13 +103,13 @@ export default {
 			}
 
 			if ( errors.length ) {
-				this.notifications = errors;
-				this.nPass = false;
+				notifications.value = errors;
+				nPass.value = false;
 				return;
 			}
 
 			// Communicate with lambda server.
-			this.isLoading = true;
+			isLoading.value = true;
 			try {
 				const response = await axios.post( `https://dxnmuircbi.execute-api.us-west-2.amazonaws.com${window.location.hostname === 'localhost' ? '/dev' : ''}/email`, {
 					template: 'inquiry',
@@ -125,16 +122,27 @@ export default {
 					from: 'hicham.taha@henesysgroup.com',
 					layout: 'maplebrosconstruction',
 				} );
-				this.notifications = [response.data];
-				this.nPass = response.pass;
-				if ( this.nPass ) { this.formData = JSON.parse( JSON.stringify( defaultFormData ) ); }
+				notifications.value = [response.data];
+				nPass.value = response.pass;
+				if ( nPass.value ) { 
+					for ( const key in defaultFormData ) { formData[key] = defaultFormData[key]; }
+				}
 			} catch (e) {
-				this.nPass = false;
-				this.notifications = ['Unable to communicate with servers, please try again later.'];
+				console.log('error', e);
+				nPass.value = false;
+				notifications.value = ['Unable to communicate with servers, please try again later.'];
 			}
-			this.isLoading = false;
+			isLoading.value = false;
 		}
-	}
+
+		return {
+			formData,
+			notifications,
+			nPass,
+			isLoading,
+			submitEmail,
+		}
+	},
 }
 </script>
 <style lang="postcss">

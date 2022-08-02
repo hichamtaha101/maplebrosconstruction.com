@@ -28,9 +28,11 @@
 <script>
 import { projects } from '~/assets/js/data';
 export default {
-	data() {
-		return { projects }
-	}
+	setup() {
+		return {
+			projects
+		}
+	},
 }
 </script>
 <style lang="postcss">

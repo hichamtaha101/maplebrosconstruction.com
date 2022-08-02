@@ -75,55 +75,57 @@ const defaultFormData = {
 	message: '',
 };
 
-export default {
-	asyncData({ req, params, redirect }) {
-		return new Promise( async( resolve ) => {
-			resolve({
-				services,
-			});
-		})
-	},
-	data() {
-		return {
-			formData: JSON.parse(JSON.stringify(defaultFormData)),
-			errors: [],
-			isLoading: false,
-		};
-	},
-	mounted() {
-		const { query } = this.$route;
+import {
+	defineComponent,
+	ref,
+	reactive,
+	// useAsync,
+	useRoute,
+	useRouter,
+} from '@nuxtjs/composition-api'
+
+export default defineComponent({
+	setup() {
+		const route = useRoute();
+		const router = useRouter();
+
+		const formData = reactive(JSON.parse(JSON.stringify(defaultFormData)));
+		const errors = ref([]);
+		const isLoading = ref(false);
+		// const services = useAsync(() => [{ title: 'test' }]); // This can replace some logic in the future.
+
+		// Grab service from url query (if provided).
+		const { query } = route.value;
 		if ( 'service' in query ) {
 			const service = services.find( s => s.title === query.service );
-			this.formData.service = service !== undefined ? service.title : '';
+			formData.service = service !== undefined ? service.title : '';
 		}
-	},
-	methods: {
-		async submitEmail() {
 
+		async function submitEmail() {
 			// Basic field validations.
-			const errors = ['service', 'fullName', 'email']
-			.filter( k => this.formData[k].trim() === '' )
+			const newErrors = ['service', 'fullName', 'email']
+			.filter( k => formData[k].trim() === '' )
 			.map( k => `${formDataFieldsMapped[k]} cannot be empty.`);
 
 			// Service equals Other and phone number validations.
-			if ( this.formData.service === 'Other' && this.formData.serviceOther.trim().length < 3 ) {
-				errors.push('Please enter a valid value for "Other Service". Must exceed 3 characters in length.');
+			if ( formData.service === 'Other' && formData.serviceOther.trim().length < 3 ) {
+				newErrors.push('Please enter a valid value for "Other Service". Must exceed 3 characters in length.');
 			}
-			if ( this.formData.phoneNumber.trim() !== '' && this.formData.phoneNumber.length < 14 ) {
-				errors.push('Please enter a valid phone number in the format (###)-###-####.');
+			if ( formData.phoneNumber.trim() !== '' && formData.phoneNumber.length < 14 ) {
+				newErrors.push('Please enter a valid phone number in the format (###)-###-####.');
 			}
 
 			// Email validation.
-			if ( this.formData.email.trim() !== '' && !testEmail(this.formData.email) ) {
-				errors.push('Please enter a valid email address.');
+			if ( formData.email.trim() !== '' && !testEmail(formData.email) ) {
+				newErrors.push('Please enter a valid email address.');
 			}
 
-			if ( errors.length ) { 
-				this.errors = errors;
+			if ( newErrors.length ) { 
+				errors.value = newErrors;
 				return; 
 			} // Don't continue.
 
-			this.isLoading = true;
+			isLoading.value = true;
 			try {
 				const response = await axios.post( `https://dxnmuircbi.execute-api.us-west-2.amazonaws.com${window.location.hostname === 'localhost' ? '/dev' : ''}/email`, {
 					template: 'quote',
@@ -132,11 +134,11 @@ export default {
 					content: {
 						title: 'A customer has made the following inquiry.',
 						data: {
-							email: this.formData.email,
-							service: this.formData.service !== 'Other' ? this.formData.service : `${this.formData.serviceOther} (Others)`,
-							message: this.formData.message || 'N/A',
-							phoneNumber: this.formData.phoneNumber || 'N/A',
-							fullName: this.formData.fullName,
+							email: formData.email,
+							service: formData.service !== 'Other' ? formData.service : `${formData.serviceOther} (Others)`,
+							message: formData.message || 'N/A',
+							phoneNumber: formData.phoneNumber || 'N/A',
+							fullName: formData.fullName,
 						},
 					},
 					from: 'hicham.taha@henesysgroup.com',
@@ -145,19 +147,28 @@ export default {
 
 				// Reset form upon success and redirect.
 				if ( response.pass ) {
-					this.formData = JSON.parse(JSON.stringify(defaultFormData))
-					this.$router.push('/thank-you');
+					for ( const key in defaultFormData ) { formData[key] = defaultFormData[key]; }
+					router.push('/thank-you');
 				} else {
-					this.errors = [response.data];
+					errors.value = [response.data];
 				}
 
 			} catch (e) {
-				this.errors = ['Unable to communicate with servers, please try again later.'];
+				console.log('error', e);
+				errors.value = ['Unable to communicate with servers, please try again later.'];
 			}
-			this.isLoading = false;
+			isLoading.value = false;
 		}
-	}
-}
+
+		return {
+			formData,
+			errors,
+			isLoading,
+			services,
+			submitEmail,
+		}
+	},
+})
 </script>
 <style lang="postcss">
 .mbc {

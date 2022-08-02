@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@nuxt/image": "^0.6.2",
+		"@nuxtjs/composition-api": "^0.33.1",
 		"@nuxtjs/tailwindcss": "^5.0.4",
 		"axios": "^0.27.2",
 		"core-js": "^3.19.3",
