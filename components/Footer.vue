@@ -17,7 +17,7 @@
 							<textarea v-model="formData.message" placeholder="How can we help you?" class="w-full"></textarea>
 						</div>
 						<div>
-							<button @click="submitEmail" class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
+							<button aria-label="Submit" @click="submitEmail" class="mbc-button mbc-button--inverse mbc-button--inverse--full-w text-center"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
 						</div>
 						<div :class="`mbc-footer-contact__form__notifications ${!nPass ? 'text-red-600' : 'text-green-600'}`" v-if="notifications.length">
 							<ul>
@@ -41,8 +41,8 @@
 					</div>
 					<div class="mbc-footer-contact__location pt-8">
 						<h2>Visit our office</h2>
-						<p class="pt-2"><i class="fa-solid fa-location-pin mr-2"></i>1269-6969 Cooney Rd, Richmond BC, V6YE09</p>
-						<p class="pt-2"><i class="fa-solid fa-phone mr-2"></i>+1 (778)-789-6969</p>
+						<a class="pt-2 block" :href="`https://www.google.com/maps?q=6888 Cooney Rd, Richmond BC`" target="_blank"><i class="fa-solid fa-location-pin mr-2"></i>1208-6888 Cooney Rd, Richmond BC, V6Y 2J9</a>
+						<a class="pt-2 block" href="tel:16045180679"><i class="fa-solid fa-phone mr-2"></i>+1 (604) 518-0679</a>
 					</div>
 				</div>
 			</div>
@@ -50,9 +50,8 @@
 
 		<!-- disclaimer -->
 		<div class="mbc-footer-location">
-			<div class="mbc-wrapper flex flex-wrap justify-between gap-4 p-4 text-sm">
-				<div>Logo</div>
-				<div>Copyright © {{ new Date().getFullYear() }} MBC Services Ltd. • <a href="https://henesysgroup.com" target="_blank">Powered by Henesys Group</a></div>
+			<div class="mbc-wrapper flex flex-wrap justify-center gap-4 p-4 text-sm">
+				<div>Copyright © {{ new Date().getFullYear() }} MBC Services Ltd. • <a aria-label="Powered By Henesys Digital Limited" href="https://henesysdigital.com" target="_blank">Powered by Henesys Digital Ltd</a></div>
 			</div>
 		</div>
 	</div>

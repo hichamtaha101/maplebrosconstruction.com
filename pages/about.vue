@@ -4,7 +4,7 @@
 		<div class="mbc-wrapper">
 			<div class="mbc-section mbc-section--about">
 				<h1 class="text-center">Who We Are</h1>
-				<p class="mbc-section__sub-title text-center">Duis aute irure dolor in reprehenderit in voluptate velit irure dolor.</p>
+				<p class="mbc-section__sub-title text-center">Our team is dedicated to providing you with a stress-free experience. From the initial consultation to the final walkthrough, we work closely with you to ensure that your project is completed on time and within budget. We understand that home construction and renovation can be overwhelming, and that's why we are here to guide you through the process every step of the way.</p>
 			</div>
 			<div class="mbc-team pb-12">
 				<div class="mbc-team-member" v-for="(member, i) in people" :key="i">
@@ -17,10 +17,10 @@
 						</h3>
 						<p class="mbc-team-member__contact__bio">{{ member.bio }}</p>
 						<div class="mbc-team-member__contact__email flex gap-2 items-center">
-							<i class="fa fa-envelope"/><a :href="`mailto:${member.email}`" class="underline">{{ member.email }}</a>
+							<i class="fa fa-envelope"/><a :aria-label="`${member.name} email ${member.email}`" :href="`mailto:${member.email}`" class="underline">{{ member.email }}</a>
 						</div>
 						<div class="mbc-team-member__contact__phone flex gap-2 items-center">
-							<i class="fa fa-phone"/><a :href="`tel:${member.phone}`" class="underline">{{ member.phone }}</a>
+							<i class="fa fa-phone"/><a :aria-label="`${member.name} phone ${member.phone}`" :href="`tel:${member.phone}`" class="underline">{{ member.phone }}</a>
 						</div>
 					</div>
 				</div>
@@ -38,21 +38,21 @@ export default {
 					name: 'Youns Taha',
 					title: 'Owner',
 					email: 'youns@gmail.com',
-					phone: '778-666-6969',
+					phone: '+1 (604) 518-0679',
 					bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 				}, {
 					photoName: 'blank-profile-pic.png',
 					name: 'Josh States',
 					title: 'Manager',
 					email: 'josh@gmail.com',
-					phone: '778-666-6969',
+					phone: '+1 (604) 518-0679',
 					bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 				}, {
 					photoName: 'blank-profile-pic.png',
-					name: 'Dillon Shmillon',
-					title: 'Employee',
+					name: 'Dillon',
+					title: 'Manager',
 					email: 'dillon@gmail.com',
-					phone: '778-666-6969',
+					phone: '+1 (604) 518-0679',
 					bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 				}]
 			})

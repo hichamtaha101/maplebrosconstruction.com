@@ -5,7 +5,7 @@
 			<div class="mbc-section mbc-section--projects">
 				<div class="mbc-project" v-for="(p, i) in projects" :key="i">
 					<div class="mbc-project__thumbnail cursor-pointer">
-						<button>View More</button>
+						<button aria-label="View More">View More</button>
 						<div class="mbc-project__thumbnail__overlay" @click="$router.push('/projects/' + p._id)" />
 						<img :src="require(`~/assets/images/${p.thumbnail}`)" :alt="p.thumbnailAlt">
 					</div>

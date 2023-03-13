@@ -11,7 +11,7 @@
 						<div class="mbc-service__title text-xl mt-auto">{{ service.title }}</div>
 						<div class="mbc-service__description">{{ service.description }}</div>
 						<div class="mbc-service__button pt-5 mt-auto">
-							<button class="mbc-button text-center" @click="$router.push(`/quote?service=${service.title}`)">Get A Quote</button>
+							<button :aria-label="`Get a Quote for ${service.title}`" class="mbc-button text-center" @click="$router.push(`/quote?service=${service.title}`)">Get A Quote</button>
 						</div>
 					</div>
 				</div>
@@ -43,11 +43,14 @@ export default {
 			@media(--min-sm) {
 				max-width: 480px;
 			}
+
 			box-shadow: 2px 2px 2px rgb(0 0 0 / 4%);
+
 			img {
 				@apply w-full h-auto;
 			}
 		}
+
 		&__content {
 			@apply p-8 flex justify-center relative flex-col;
 			height: 244px;
@@ -62,18 +65,21 @@ export default {
 				border-bottom-right-radius: 3px;
 			}
 		}
+
 		&__button > div {
 			@media(--min-sm) {
 				margin-left: auto;
 				margin-right: 0;
 			}
 		}
+
 		&__description {
 			color: var(--secondary-color-2);
 		}
 
 		&:nth-child(even) {
 			@apply flex-col sm:flex-row-reverse;
+
 			.mbc-service__content {
 				box-shadow: -3px 3px 3px rgb(0 0 0 / 10%);
 				border-top-right-radius: 0px;
@@ -83,9 +89,14 @@ export default {
 					border-bottom-left-radius: 3px;
 				}
 			}
+
 			.mbc-service__button > div {
 				margin-right: auto;
 				margin-left: 0;
+			}
+
+			.mbc-service__image {
+				box-shadow: -2px 2px 2px rgb(0 0 0 / 4%);
 			}
 		}
 	}

@@ -4,12 +4,13 @@
 		<div class="mbc-wrapper">
 			<div class="mbc-section mbc-section--quote">
 				<h1 class="text-center">One Email Away</h1>
-				<p class="mbc-section__sub-title text-center">Duis aute irure dolor in reprehenderit in voluptate velit irure dolor.</p>
+				<p class="mbc-section__sub-title text-center">If you're looking for reliable and trustworthy construction services in Vancouver, look no further than our team. Contact us today to schedule a consultation and see how we can turn your dreams into reality.</p>
 			</div>
-			<div class="mbc-quote flex-col sm:flex-row flex pb-12 gap-4 sm:gap-6">
-				<div class="mbc-quote--left-graphic flex-grow flex justify-center">
+			<div class="mbc-quote flex-col sm:flex-row flex pb-12 sm:gap-6">
+				<div class="mbc-quote--left-graphic w-full">
+					<img src="~assets/images/quote-left-graphic.png" alt="Client and construction services consultant shaking hands">
 				</div>
-				<div class="mbc-quote--right-content">
+				<div class="mbc-quote--right-content w-full">
 					<div class="mbc-quote-form p-8 bg-white flex flex-col gap-6 relative">
 						<loader v-if="isLoading"/>
 						<div class="mbc-quote-form__input mbc-quote-form__input--select">
@@ -41,7 +42,7 @@
 							<textarea v-model="formData.message" name="message-textarea"></textarea>
 						</div>
 						<div class="mbc-quote-form__input mbc-quote-form__input--button">
-							<button @click="submitEmail" class="mbc-button mbc-button--full-w text-center uppercase"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
+							<button aria-label="Submit Email" @click="submitEmail" class="mbc-button mbc-button--full-w text-center uppercase"><i class="fa fa-paper-plane mr-2"></i>Submit</button>
 						</div>
 						<div class="mbc-quote-form__errors text-red-600" v-if="errors.length">
 							<ul>
@@ -177,27 +178,34 @@ export default defineComponent({
 	}
 	&-quote {
 		padding-bottom: 140px;
-		> div {
-			@apply w-full;
-			box-shadow: 2px 2px 2px rgb(0 0 0 / 4%);
-			min-height: 420px;
+
+		&--left-graphic img {
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+			max-height: 20rem; /* 320px */
+
 			@media(--min-sm) {
-				min-height: 500px;
+				max-height: 36.75rem; /* 588px */
 			}
 		}
-		&--left-graphic {
-			@apply bg-center bg-cover;
-			background-image: url('~assets/images/quote-left-graphic.png');
-		}
+
 		&-form {
-			border-radius: 4px;
+			box-shadow: 2px 2px 2px rgb(0 0 0 / 4%);
+			border-bottom-right-radius: 0.25rem; /* 4px */
+			border-bottom-left-radius: 0.25rem; /* 4px */
+
+			@media(--min-sm) {
+				border-radius: 0.25rem; /* 4px */
+			}
+
 			&__input {
 				display: flex;
 				flex-direction: column;
-				gap: 4px;
+				gap: 0.25rem;
 				label {
 					text-transform: uppercase;
-					font-size: 14px;
+					font-size: 0.875rem;
 				}
 
 				textarea, input, select {

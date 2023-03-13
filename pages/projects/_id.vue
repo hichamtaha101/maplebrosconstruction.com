@@ -4,7 +4,7 @@
 		<div class="mbc-wrapper">
 			<div class="mbc-section mbc-section--project-detail">
 				<div>
-					<button class="mbc-button ml-6 mb-12 flex items-center justify-start" @click="$router.push('/projects')"><i class="fa fa-angle-left mr-2"></i>View All Projects</button>
+					<button aria-label="View All Projects" class="mbc-button ml-6 mb-12 flex items-center justify-start" @click="$router.push('/projects')"><i class="fa fa-angle-left mr-2"></i>View All Projects</button>
 				</div>
 				<VueSlickCarousel class="block xs:hidden" v-bind="settings">
 					<div class="mbc-detail__slide" v-for="(slide, i) in project.slides" :key="i">

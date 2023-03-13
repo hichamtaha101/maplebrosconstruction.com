@@ -3,13 +3,14 @@
 		<div class="mbc-section--hero">
 			<div class="mbc-wrapper flex-col sm:flex-row flex gap-8">
 				<div class="w-full p-8 mbc-section--hero__content">
-					<h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
-					<p class="mt-4 leading-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<h1>Looking to build your dream home or start a renovation project in Vancouver?</h1>
+					<p class="mt-4 leading-normal">Look no further than our expert construction services! At our construction company, we pride ourselves on delivering high-quality workmanship and exceptional customer service. Our team of skilled professionals has years of experience in the industry and can handle any project, big or small.</p>
+					<p class="mt-4 leading-normal">Whether you're looking to build a custom home from scratch, renovate your existing space, or add an addition to your home, we have the skills and expertise to make your vision a reality. We use only the best materials and equipment to ensure that your project is not only beautiful but also built to last.</p>
 					<div class="flex flex-wrap sm:flex-nowrap gap-8 mt-8">
-						<button class="mbc-button text-center" @click="$router.push('/about')">
+						<button aria-label="About Us" class="mbc-button text-center" @click="$router.push('/about')">
 							About Us
 						</button>
-						<button class="mbc-button text-center" @click="$router.push('/quote')">
+						<button aria-label="Request A Quote" class="mbc-button text-center" @click="$router.push('/quote')">
 							Request A Quote
 						</button>
 					</div>
@@ -26,7 +27,7 @@
 						<div class="mbc-service-card__title text-xl">{{service.title }}</div>
 						<div class="mbc-service-card__icon"><i :class="`${service.icon} text-6xl`"></i></div>
 						<div class="mbc-service-card__description">{{ service.description }}</div>
-						<button class="mbc-button mbc-button--full-w" @click="$router.push(`${service.link}#${service.hash}`)">Learn More</button>
+						<button :aria-label="`Learn More About ${service.title}`" class="mbc-button mbc-button--full-w mt-auto" @click="$router.push(`${service.link}#${service.hash}`)">Learn More</button>
 					</div>
 				</div>
 			</div>
@@ -37,7 +38,7 @@
 				<p class="text-center mbc-section__sub-title">Check out our latest exterior and interior renovations.</p>
 				<div class="mbc-our-work flex-col sm:flex-row flex gap-6 mt-16">
 					<div class="mbc-work--featured" @click="$router.push('/projects/' + featuredProject._id)">
-						<button class="mbc-work-button" @click="$router.push('/projects/' + featuredProject._id)">{{ featuredProject.title }}</button>
+						<button :aria-label="`${featuredProject.title}`" class="mbc-work-button" @click="$router.push('/projects/' + featuredProject._id)">{{ featuredProject.title }}</button>
 						<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + featuredProject._id)" />
 						<div class="mbc-work__image">
 							<img class="w-full" :src="require(`~/assets/images/${featuredProject.thumbnail}`)" :alt="featuredProject.thumbnailAlt">
@@ -45,7 +46,7 @@
 					</div>
 					<div class="mbc-work-wrap grid gird-cols-1 xs:grid-cols-2 gap-6 flex-grow">
 						<div class="mbc-work" v-for="(project, i ) in projects.filter( p => !p.featured ).slice(0,4)" :key="i" @click="$router.push('/projects/' + project._id)">
-							<button class="mbc-work-button" @click="$router.push('/projects/' + project._id)">{{ project.title }}</button>
+							<button :aria-label="`${project.title}`" class="mbc-work-button" @click="$router.push('/projects/' + project._id)">{{ project.title }}</button>
 							<div class="mbc-work--featured__overlay" @click="$router.push('/projects/' + project._id)" />
 							<div class="mbc-work__image">
 								<img class="w-full" :src="require(`~/assets/images/${project.thumbnail}`)" :alt="project.thumbnailAlt">
@@ -54,7 +55,7 @@
 					</div>
 				</div>
 				<div class="flex justify-center mt-16">
-					<button class="mbc-button text-center" @click="$router.push('/projects')">View All Projects</button>
+					<button aria-label="View All Projects" class="mbc-button text-center" @click="$router.push('/projects')">View All Projects</button>
 				</div>
 			</div>
 		</div>
@@ -164,8 +165,10 @@ export default {
 		}
 	}
 	&__sub-title {
-		font-size: 18px;
+		font-size: 1.125rem; /* 18px */
 		color: var(--secondary-color-2);
+		max-width: 62rem; /* 992px */
+		margin: 0 auto;
 	}
 }
 
@@ -183,6 +186,13 @@ export default {
 	border: 1px solid var(--secondary-color-2);
 	border-radius: 4px;
 	@apply flex justify-center items-center p-6 flex-col gap-5 !important;
+
+	&__comment {
+		display: -webkit-box;
+		-webkit-line-clamp: 5;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
 
 	&__image {
 		width: 160px;
@@ -228,6 +238,10 @@ export default {
 	}
 	&__description {
 		color: var(--secondary-color-3);
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;  
+		overflow: hidden;
 	}
 }
 
